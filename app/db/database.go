@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	log "github.com/sirupsen/logrus"
-	"song_library/app/config"
+	"song_library/config"
 )
 
 var Db *sql.DB
