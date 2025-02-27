@@ -1,8 +1,6 @@
 package config
 
 import (
-	"github.com/joho/godotenv"
-	log "github.com/sirupsen/logrus"
 	"os"
 )
 
@@ -17,11 +15,6 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
-	err := godotenv.Load()
-	if err != nil {
-		log.Warn("No .env file found")
-	}
-
 	return &Config{
 		DBHost:         os.Getenv("POSTGRES_HOST"),
 		DBPort:         os.Getenv("POSTGRES_PORT"),
