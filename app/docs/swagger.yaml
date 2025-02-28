@@ -1,0 +1,228 @@
+basePath: /
+definitions:
+  models.Song:
+    properties:
+      group:
+        type: string
+      id:
+        type: integer
+      link:
+        type: string
+      releaseDate:
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a simple API to manage a song library.
+  title: Song Library API
+  version: "1.0"
+paths:
+  /songs:
+    get:
+      description: Returns a list of songs with optional filters by group name, song
+        name, and release date
+      parameters:
+      - description: Group name
+        in: query
+        name: group
+        type: string
+      - description: Song name
+        in: query
+        name: song
+        type: string
+      - description: 'Release date (format: DD.MM.YYYY)'
+        in: query
+        name: releaseDate
+        type: string
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Number of songs per page (default: 5)'
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Song'
+            type: array
+        "500":
+          description: Database error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a list of songs
+      tags:
+      - Songs
+    post:
+      consumes:
+      - application/json
+      description: Adds a new song by fetching its details from an external API
+      parameters:
+      - description: Song data (group, song)
+        in: body
+        name: song
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Added song ID
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: Invalid request or missing song information
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Database error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add a song
+      tags:
+      - Songs
+  /songs/{song_id}:
+    delete:
+      description: Deletes a song by the specified ID
+      parameters:
+      - description: Song ID
+        in: path
+        name: song_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Song deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid song ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Song not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Database error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a song
+      tags:
+      - Songs
+    put:
+      consumes:
+      - application/json
+      description: Updates song details by its ID
+      parameters:
+      - description: Song ID
+        in: path
+        name: song_id
+        required: true
+        type: integer
+      - description: Updated song details
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/models.Song'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Song updated successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid data format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Song not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Database error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a song
+      tags:
+      - Songs
+  /songs/lyrics/{song_id}:
+    get:
+      description: Returns the lyrics of a song, split into verses, with pagination
+        support
+      parameters:
+      - description: Song ID
+        in: path
+        name: song_id
+        required: true
+        type: integer
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Number of verses per page (default: 1)'
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+        "400":
+          description: Invalid song ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Song not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get song lyrics
+      tags:
+      - Lyrics
+swagger: "2.0"
