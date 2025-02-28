@@ -3,7 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 	"song_library/config"
 )
 
@@ -17,12 +17,12 @@ func InitDB(cfg *config.Config) {
 
 	Db, err = sql.Open("postgres", dbinfo)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("Database connection failed")
 	}
 
 	err = Db.Ping()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("Database ping failed")
 	}
-	log.Info("Connected to database!")
+	log.Info().Msg("Connected to database!")
 }
